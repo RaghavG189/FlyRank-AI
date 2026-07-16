@@ -1,4 +1,4 @@
-from fastapi import FastAPI #import fastapi
+from fastapi import FastAPI, HTTPException #import fastapi and HTTPException
 from pydantic import BaseModel #import basemodel
 
 #create instance of fastapi
@@ -28,3 +28,25 @@ async def status():
 
 
 #Stage 2
+tasks = [
+{"task_id": 1, "title": "vaccumming", "done": True}, 
+{"task_id": 2, "title": "laundry", "done": False}, 
+{"task_id": 3, "title": "dishes", "done": True}
+]
+
+
+@app.get('/tasks')
+
+async def get_tasks():
+    return tasks
+
+
+@app.get("/tasks/{task_id}")
+
+async def get_task(task_id: int):
+    for task in tasks:
+        if task["task_id"] == task_id:
+            return task
+    
+    raise HTTPException(status_code=404, detail={"error": f"task {task_id} not found"})
+
