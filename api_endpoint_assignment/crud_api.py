@@ -50,3 +50,27 @@ async def get_task(task_id: int):
     
     raise HTTPException(status_code=404, detail={"error": f"task {task_id} not found"})
 
+
+#Stage 3
+#declare class
+class Task(BaseModel):
+    id: int | None = None
+    title: str | None = None
+    done : bool | None = None
+
+@app.post('/tasks', status_code=201)
+
+async def create_task(task:Task):
+    task_dict = task.model_dump()
+    if task.title is not None and task.title.strip() != "":
+        if task.id is None and task.done is None:
+
+                task_dict.update({"id": len(tasks) + 1})
+                task_dict.update({"done": False})
+        
+        tasks.append(task_dict)
+
+        return task_dict
+    
+    raise HTTPException(status_code=400, detail="Title is either missing or empty.")
+
