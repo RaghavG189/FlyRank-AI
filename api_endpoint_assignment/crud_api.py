@@ -16,13 +16,11 @@ async def greet():
 
 #STAGE 1
 @app.get('/')
-
 async def describe():
     return {"name": "Task API", "version": "1.0", "endpoints": ["/tasks"]}
 
 
 @app.get('/health')
-
 async def status():
     return {"status": "ok"}
 
@@ -36,13 +34,11 @@ tasks = [
 
 
 @app.get('/tasks')
-
 async def get_tasks(): #Returns list of all tasks
     return tasks
 
 
 @app.get("/tasks/{task_id}")
-
 async def get_task(task_id: int): #Returns specific task by ID
     for task in tasks:
         if task.get("task_id") == task_id:
@@ -70,7 +66,6 @@ else:
 
 
 @app.post('/tasks', status_code=201)
-
 async def create_task(task:Task):
     task_dict = task.model_dump() #Get model of class with values
 
