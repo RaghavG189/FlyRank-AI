@@ -13,7 +13,7 @@ Example command: "curl.exe -i http://localhost:8000/tasks" This command will ret
 
 All Endpoints:
 |----------|--------------------------------|-----------------|
-|Endpoint  |	Description	                | Example Command |
+|Endpoint  |	Description	                  | Example Command |
 |----------|--------------------------------|-----------------|
 |  GET     |   Retrieves data from server   | curl.exe -i http://localhost:8000/tasks
 |  POST	   |   Sends data to the server     | curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"
