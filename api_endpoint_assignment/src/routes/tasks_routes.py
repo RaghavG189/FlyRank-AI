@@ -24,7 +24,7 @@ def get_task(task_id: int):
 
 class Createtask(BaseModel):
     title: str
-    done: bool | None = None
+    done: bool = False
 
 @router.post('/tasks')
 def create_task(createtask:Createtask):

@@ -6,6 +6,22 @@ tasks = [
 
 current_task_id = 0 if len(tasks) == 0 else max([task['task_id'] for task in tasks])
 
+#-------------------------------------------------------------------------------------------
+
+import sqlite3 as sq
+
+con = sq.connect("tasks.db")
+
+cur = con.cursor()
+
+#Creates task table to store data
+cur.execute('''CREATE TABLE IF NOT EXISTS tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, done BOOLEAN CHECK (done in (0, 1)))''')
+
+
+
+
+
+
 
 def get_tasks():
     return tasks
