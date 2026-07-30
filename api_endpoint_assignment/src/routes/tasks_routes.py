@@ -29,9 +29,9 @@ class Createtask(BaseModel):
 @router.post('/tasks')
 def create_task(createtask:Createtask):
 
-    task = s.make_task(createtask.title, createtask.done)
+    output = s.make_task(createtask.title, createtask.done)
 
-    return task
+    return output
 
 
 class Updatetask(BaseModel):

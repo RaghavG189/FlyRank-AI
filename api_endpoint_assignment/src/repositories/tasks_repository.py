@@ -1,57 +1,61 @@
-tasks = [
-{"task_id": 1, "title": "vaccumming", "done": True}, 
-{"task_id": 2, "title": "laundry", "done": False}, 
-{"task_id": 3, "title": "dishes", "done": True}
-]
-
-current_task_id = 0 if len(tasks) == 0 else max([task['task_id'] for task in tasks])
-
-#-------------------------------------------------------------------------------------------
-
 import sqlite3 as sq
 
-con = sq.connect("tasks.db")
+
+con = sq.connect("tasks.db", check_same_thread=False)
+
+
+con.row_factory = sq.Row
 
 cur = con.cursor()
 
 #Creates task table to store data
-cur.execute('''CREATE TABLE IF NOT EXISTS tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, done BOOLEAN CHECK (done in (0, 1)))''')
+create_table_query = "CREATE TABLE IF NOT EXISTS tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, done BOOLEAN CHECK (done in (0, 1)))"
+cur.execute(create_table_query)
+
+#Insert example tasks if table empty
+sample_query = '''INSERT INTO tasks(title, done)
+SELECT 'dishes', 1 WHERE NOT EXISTS (SELECT 1 FROM tasks LIMIT 1)
+UNION ALL
+SELECT 'laundry', 0 WHERE NOT EXISTS (SELECT 1 FROM tasks LIMIT 1)
+UNION ALL
+SELECT 'cooking', 1 WHERE NOT EXISTS (SELECT 1 FROM tasks LIMIT 1);
+'''
+cur.execute(sample_query)
+con.commit()
 
 
 
+def close_connection():
 
-
+    cur.close()
+    con.close()
 
 
 def get_tasks():
+
+    cur.execute("SELECT * FROM tasks")
+    tasks = cur.fetchall()
+
     return tasks
 
 
 def get_task_id(task_id: int):
 
-    for task in tasks:
-        if task["task_id"] == task_id:
-            return task
+    cur.execute("SELECT * FROM tasks where id = ?", (task_id,))
+    task = cur.fetchone()
 
-    return None
+    return task
+    
 
 
 def create_task(title:str, done:bool):
 
-    global current_task_id
-    current_task_id += 1
+    cur.execute("INSERT INTO tasks (title, done) VALUES (?, ?)", (title, done))
+    con.commit()
+    
+    return True
 
-    task = {
-        "task_id": current_task_id,
-        "title":title,
-        "done":done
-    }
-
-    tasks.append(task)
-
-    return task
-
-
+'''
 def update_task(task_id: int, updates:dict):
 
     for task in tasks:
@@ -70,3 +74,4 @@ def delete_task(task_id:int):
             return True
 
     return False
+'''
