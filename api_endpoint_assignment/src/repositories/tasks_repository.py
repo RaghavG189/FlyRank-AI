@@ -47,7 +47,6 @@ def get_task_id(task_id: int):
     return task
     
 
-
 def create_task(title:str, done:bool):
 
     cur.execute("INSERT INTO tasks (title, done) VALUES (?, ?)", (title, done))
