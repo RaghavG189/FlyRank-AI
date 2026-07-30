@@ -26,7 +26,7 @@ class Createtask(BaseModel):
     title: str
     done: bool = False
 
-@router.post('/tasks')
+@router.post('/tasks', status_code=201)
 def create_task(createtask:Createtask):
 
     output = s.make_task(createtask.title, createtask.done)

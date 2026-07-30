@@ -51,8 +51,11 @@ def create_task(title:str, done:bool):
 
     cur.execute("INSERT INTO tasks (title, done) VALUES (?, ?)", (title, done))
     con.commit()
+
+    cur.execute("SELECT * FROM tasks where title = ? AND done = ?", (title, done))
+    task = cur.fetchone()
     
-    return True
+    return task
 
 '''
 def update_task(task_id: int, updates:dict):
