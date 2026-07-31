@@ -92,7 +92,7 @@ The SQLite database file is created as `tasks.db` in the `api_endpoint_assignmen
 
 Screenshot of DB Browser:
 
-
+<img width="1264" height="577" alt="Screenshot 2026-07-31 002008" src="https://github.com/user-attachments/assets/42c20943-e08e-4601-a19f-a0e10ccdd817" />
 
 
 ## Notes
