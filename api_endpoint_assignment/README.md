@@ -1,46 +1,109 @@
-CURD API TASK MANAGER
+# CURD API Task Manager
 
-What this is: This is a task manager that follows the full CURD cycle. Using GET, POST, PUT, and DELETE endpoints, you can get, create, change, and delete tasks of your liking. 
+A simple FastAPI task manager that supports the full CRUD cycle using GET, POST, PUT, and DELETE endpoints. You can retrieve, create, update, and delete tasks using the provided API.
 
-How to install: Inside the "api_endpoint_assignment" folder is a "requirements.txt" file that has all the libraries you need to run the code - FastAPI, Pydantic, Uvicorn, Swagger UI.
-To install the packages, run the following command in the terminal: "pip install -r requirements.txt"
+## Features
 
-How to Run: To run the code, type "fastapi dev crud_api.py" in the terminal
-When the server starts, open another terminal preferably command prompt and enter the following code
-to test an endpoint such as GET
-Example command: "curl.exe -i http://localhost:8000/tasks" This command will retrieve all current tasks
+- GET `/tasks` to list all tasks
+- POST `/tasks` to create a new task
+- PUT `/tasks/{task_id}` to update an existing task
+- DELETE `/tasks/{task_id}` to remove a task
+- Optional SQLite persistence with `tasks.db`
+- Swagger UI available at `/docs`
 
+## Requirements
 
-All Endpoints:
+Required Python packages are listed in `requirements.txt`.
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Run the server
+
+From the `api_endpoint_assignment` directory, start the server with:
+
+```bash
+uvicorn src.main:app --reload
+```
+
+When the server starts, the API is available at `http://127.0.0.1:8000`.
+
+## Test the API
+
+Use `curl.exe` or your preferred HTTP client.
+
+Example:
+
+```bash
+curl.exe -i http://localhost:8000/tasks
+```
+
+## Swagger UI
+
+Open the browser and go to:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Screenshot of UI:
+
+<img width="2198" height="680" alt="Swagger UI Screenshot" src="https://github.com/user-attachments/assets/7e3fa51a-d2b1-4910-a4c4-d98a314d048d" />
+
+## Endpoints
+
 | Endpoint | Description | Example Command |
 | --- | --- | --- |
-| GET | Retrieves data from server | `curl.exe -i http://localhost:8000/tasks` |
-| POST | Sends data to the server | `curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"` |
-| PUT | Replaces a resource identified with a given URL | `curl.exe -i -X PUT http://localhost:8000/tasks/{task_id} -H "Content-Type: application/json" -d "{\"done\":true}"` |
-| DELETE | Removes a resource from the server | `curl.exe -i -X DELETE http://localhost:8000/tasks/{task_id}` |
+| `GET /tasks` | Retrieve all tasks | `curl.exe -i http://localhost:8000/tasks` |
+| `POST /tasks` | Create a new task | `curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"` |
+| `PUT /tasks/{task_id}` | Update a task's fields | `curl.exe -i -X PUT http://localhost:8000/tasks/{task_id} -H "Content-Type: application/json" -d "{\"done\":true}"` |
+| `DELETE /tasks/{task_id}` | Delete a task | `curl.exe -i -X DELETE http://localhost:8000/tasks/{task_id}` |
 
-Example output using a command:
-Running the command "curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"" will output the following:
----------------------------------------------
+## Example response
+
+Running this command:
+
+```bash
+curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"
+```
+
+Produces output similar to:
+
+```http
 HTTP/1.1 201 Created
-date: Sat, 18 Jul 2026 19:12:39 GMT
-server: uvicorn
+Date: Sat, 18 Jul 2026 19:12:39 GMT
+Server: uvicorn
 content-length: 43
 content-type: application/json
 
 {"task_id":4,"title":"mowing","done":false}
----------------------------------------------
-The server will assign a task_id for you and set done to false. You can add your own value for "done".
+```
+
+The server assigns a `task_id` automatically and defaults `done` to `false` unless otherwise specified.
+
+## Database persistence
+
+This assignment version uses SQLite instead of an in-memory list. That means data is persisted to disk and does not reset when the server restarts.
+
+The SQLite database file is created as `tasks.db` in the `api_endpoint_assignment` folder.
+
+Screenshot of DB Browser:
 
 
-Swagger UI: If you are interested in using Swagger UI, a link will be given to you "http://127.0.0.1:8000/docs" when you start the server.
-Screenshot of UI:
-<img width="2198" height="680" alt="Screenshot 2026-07-18 142736" src="https://github.com/user-attachments/assets/7e3fa51a-d2b1-4910-a4c4-d98a314d048d" />
 
 
-SQL RESULT:
-After running the SQL query: "DELETE FROM tasks WHERE done = 1;"
-it returned no rows since all my tasks were set to done = 1
+## Notes
 
+Example SQL query used during testing:
+
+```sql
+DELETE FROM tasks WHERE done = 1;
+```
+
+
+If no rows are returned, that means all tasks were already marked as `done = 1`.
 
 
