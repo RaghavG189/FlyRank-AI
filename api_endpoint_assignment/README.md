@@ -12,17 +12,14 @@ Example command: "curl.exe -i http://localhost:8000/tasks" This command will ret
 
 
 All Endpoints:
-|----------|--------------------------------|-----------------|
-|Endpoint  |	Description	                  | Example Command |
-|----------|--------------------------------|-----------------|
-|  GET     |   Retrieves data from server   | curl.exe -i http://localhost:8000/tasks
-|  POST	   |   Sends data to the server     | curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"
-|  PUT	   |   Replace a resource identified| curl.exe -i -X PUT http://localhost:8000/tasks{task_id} -H "Content-Type: application/json" -d "{\"done\":true}"        
-|          |   with a given URL             |         
-|  DELETE  |   Removes Resource from server | curl.exe -i -X DELETE http://localhost:8000/tasks/{task_id}    
+| Endpoint | Description | Example Command |
+| --- | --- | --- |
+| GET | Retrieves data from server | `curl.exe -i http://localhost:8000/tasks` |
+| POST | Sends data to the server | `curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"` |
+| PUT | Replaces a resource identified with a given URL | `curl.exe -i -X PUT http://localhost:8000/tasks/{task_id} -H "Content-Type: application/json" -d "{\"done\":true}"` |
+| DELETE | Removes a resource from the server | `curl.exe -i -X DELETE http://localhost:8000/tasks/{task_id}` |
 
-
-Example output using command:
+Example output using a command:
 Running the command "curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"" will output the following:
 ---------------------------------------------
 HTTP/1.1 201 Created
@@ -39,3 +36,11 @@ The server will assign a task_id for you and set done to false. You can add your
 Swagger UI: If you are interested in using Swagger UI, a link will be given to you "http://127.0.0.1:8000/docs" when you start the server.
 Screenshot of UI:
 <img width="2198" height="680" alt="Screenshot 2026-07-18 142736" src="https://github.com/user-attachments/assets/7e3fa51a-d2b1-4910-a4c4-d98a314d048d" />
+
+
+SQL RESULT:
+After running the SQL query: "DELETE FROM tasks WHERE done = 1;"
+it returned no rows since all my tasks were set to done = 1
+
+
+
