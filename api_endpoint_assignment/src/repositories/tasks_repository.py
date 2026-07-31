@@ -52,7 +52,8 @@ def create_task(title:str, done:bool):
     cur.execute("INSERT INTO tasks (title, done) VALUES (?, ?)", (title, done))
     con.commit()
 
-    cur.execute("SELECT * FROM tasks where id = ?", (cur.lastrowid))
+    new_task_id = cur.lastrowid
+    cur.execute("SELECT * FROM tasks where id = ?", (new_task_id,))
     task = cur.fetchone()
     
     return task
@@ -64,20 +65,20 @@ def update_task(task_id: int, updates:dict):
     con.commit()
 
     if cur.rowcount > 0:
-        cur.execute("SELECT * FROM tasks WHERE id = ?", (task_id))
+        cur.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
         task = cur.fetchone()
 
         return task
     
     return None
 
-'''
+
 def delete_task(task_id:int):
 
-    for index, task in enumerate(tasks):
-        if task["task_id"] == task_id:
-            tasks.pop(index)
-            return True
+    cur.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+    con.commit()
 
-    return False
-'''
+    if cur.rowcount == 0:
+        return False
+    
+    return None

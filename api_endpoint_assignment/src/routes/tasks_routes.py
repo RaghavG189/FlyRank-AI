@@ -47,7 +47,7 @@ def update_task(updatetask:Updatetask):
     return updated_task
 
 
-@router.delete('/tasks/{task_id}')
+@router.delete('/tasks/{task_id}', status_code=204)
 def delete_task(task_id:int):
 
     output = s.deleted_task(task_id)
