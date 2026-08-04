@@ -28,6 +28,7 @@ def list_tasks(done:bool, search:str):
 
     return result
 
+
 #Gets task based on id
 def task_id(task_id: int):
 

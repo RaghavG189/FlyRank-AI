@@ -8,7 +8,7 @@ from src.routes.tasks_routes import router as taskroutes
 from src.repositories.tasks_repository import close_connection
 
 
-#Closes database and cursor when server starts
+#Closes database and cursor when server stops
 @asynccontextmanager
 async def lifespan(app:FastAPI):
 
