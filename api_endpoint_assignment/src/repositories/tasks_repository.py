@@ -1,30 +1,32 @@
-#import sqlite3 for database usage
-import sqlite3 as sq
+#import psycopg to connect to database
+import psycopg
+import os
+from dotenv import load_dotenv
 
-#Connect to the database - tasks.db
-con = sq.connect("tasks.db", check_same_thread=False) #check_same_thread set to false allowing multiple threads
+load_dotenv()
 
-
-con.row_factory = sq.Row #Converts database rows into dictionary style format 
-
-
-cur = con.cursor() #Cursor object for execute, fetchone, fetchall commands
+url = os.environ["DATABASE_URL"]
 
 
-#Creates task table to store data
-create_table_query = "CREATE TABLE IF NOT EXISTS tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, done BOOLEAN CHECK (done in (0, 1)))"
-cur.execute(create_table_query)
+con = psycopg.connect(url)
 
-#Insert example tasks if table empty
-sample_query = '''INSERT INTO tasks(title, done)
-SELECT 'dishes', 1 WHERE NOT EXISTS (SELECT 1 FROM tasks LIMIT 1)
-UNION ALL
-SELECT 'laundry', 0 WHERE NOT EXISTS (SELECT 1 FROM tasks LIMIT 1)
-UNION ALL
-SELECT 'cooking', 1 WHERE NOT EXISTS (SELECT 1 FROM tasks LIMIT 1);
-'''
-cur.execute(sample_query)
+cur = con.cursor()
+
+cur.execute("""CREATE TABLE IF NOT EXISTS tasks(id serial PRIMARY KEY, title text, done boolean)""")
+
+cur.execute("""INSERT INTO tasks(title, done)
+SELECT * FROM (
+    VALUES
+        ('dishes', true),
+        ('laundry', false),
+        ('cleaning', false)
+) as sample_tasks
+WHERE NOT EXISTS (
+SELECT 1 from tasks
+);
+""")
 con.commit()
+
 
 
 #Function called in main to close database connection and cursor
