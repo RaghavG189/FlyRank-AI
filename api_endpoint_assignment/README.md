@@ -107,3 +107,11 @@ DELETE FROM tasks WHERE done = 1;
 If no rows are returned, that means all tasks were already marked as `done = 1`.
 
 
+
+## Docker Run Command
+
+When creating a new docker, run this command in terminal: docker run --name 'NAME_GOES_HERE' -e POSTGRES_PASSWORD='PASSWORD_GOES_HERE' -e POSTGRES_DB=tasks -p 5432:5432 -v taskdata:/var/lib/postgresql/data -d
+
+When running an existing docker, run this command in terminal: docker start "container_name"
+
+To open SQL prompt, run this command: docker exec -it taskdb psql -U postgres -d tasks
