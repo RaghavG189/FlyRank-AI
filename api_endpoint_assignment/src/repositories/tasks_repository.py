@@ -1,5 +1,6 @@
 #import psycopg to connect to database
 import psycopg
+from psycopg.rows import dict_row
 import os
 from dotenv import load_dotenv
 
@@ -8,7 +9,7 @@ load_dotenv()
 url = os.environ["DATABASE_URL"]
 
 
-con = psycopg.connect(url)
+con = psycopg.connect(url, row_factory=dict_row)
 
 cur = con.cursor()
 
@@ -48,7 +49,7 @@ def get_tasks():
 #Function that gets specific task by id
 def get_task_id(task_id: int):
 
-    cur.execute("SELECT * FROM tasks where id = ?", (task_id,))
+    cur.execute("SELECT * FROM tasks WHERE id = %s", (task_id,))
     task = cur.fetchone()
 
     return task
@@ -62,7 +63,7 @@ def create_task(title:str, done:bool):
 
     #Retrieve created task to send back to user
     new_task_id = cur.lastrowid
-    cur.execute("SELECT * FROM tasks where id = ?", (new_task_id,))
+    cur.execute("SELECT * FROM tasks WHERE id = ?", (new_task_id,))
     task = cur.fetchone()
     
     return task
