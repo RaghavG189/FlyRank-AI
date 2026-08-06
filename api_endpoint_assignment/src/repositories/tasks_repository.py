@@ -58,12 +58,9 @@ def get_task_id(task_id: int):
 #Function that creates a task and stores in database
 def create_task(title:str, done:bool):
 
-    cur.execute("INSERT INTO tasks (title, done) VALUES (?, ?)", (title, done))
+    cur.execute("INSERT INTO tasks (title, done) VALUES (%s, %s) RETURNING *", (title, done))
     con.commit()
 
-    #Retrieve created task to send back to user
-    new_task_id = cur.lastrowid
-    cur.execute("SELECT * FROM tasks WHERE id = ?", (new_task_id,))
     task = cur.fetchone()
     
     return task
@@ -72,24 +69,24 @@ def create_task(title:str, done:bool):
 #Function that updates task in database given user updates
 def update_task(task_id: int, updates:dict):
 
-    cur.execute("UPDATE tasks SET title = COALESCE(?, title), done = COALESCE(?, done) WHERE id = ?", (updates.get('title'), updates.get('done'), task_id))
+    cur.execute("UPDATE tasks SET title = COALESCE(%s, title), done = COALESCE(%s, done) WHERE id = %s", (updates.get('title'), updates.get('done'), task_id))
     con.commit()
 
     #Checks if data was found, updated and then returns
     if cur.rowcount > 0:
-        cur.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
+        cur.execute("SELECT * FROM tasks WHERE id = %s", (task_id,))
         task = cur.fetchone()
 
         return task
 
-    #If data never found then return none to raise error
+    #If data never found/changed then return none to raise error
     return None
 
 
 #Function that deletes task from database given task id
 def delete_task(task_id:int):
 
-    cur.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+    cur.execute("DELETE FROM tasks WHERE id = %s", (task_id,))
     con.commit()
 
     #if changes not identified return false to raise error

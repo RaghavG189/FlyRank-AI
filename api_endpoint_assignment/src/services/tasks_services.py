@@ -63,9 +63,10 @@ def update_task(task_id: int, title:str, done:bool):
 
         updates['title'] = title
 
-    if done:
+    if done != None:
         updates['done'] = done
 
+    
     updated_task = repo.update_task(task_id, updates) #Call update_task passing id and updates dict
 
     if updated_task is None:
