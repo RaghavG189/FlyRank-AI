@@ -6,7 +6,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-url = os.environ["DATABASE_URL"]
+user = os.environ["POSTGRES_USER"]
+password = os.environ["POSTGRES_PASSWORD"]
+host = os.environ["POSTGRES_HOST"]
+port = os.environ["POSTGRES_PORT"]
+db = os.environ["POSTGRES_DB"]
+
+url = f"postgres://{user}:{password}@{host}:{port}/{db}"
 
 
 con = psycopg.connect(url, row_factory=dict_row)
