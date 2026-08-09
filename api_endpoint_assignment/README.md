@@ -11,25 +11,13 @@ A simple FastAPI task manager that supports the full CRUD cycle using GET, POST,
 - Optional SQLite persistence with `tasks.db`
 - Swagger UI available at `/docs`
 
-## Requirements
-
-Required Python packages are listed in `requirements.txt`.
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
 ## Run the server
 
-From the `api_endpoint_assignment` directory, start the server with:
+When downloading the files make sure to replace the placeholder values in .env.example for .env
 
-```bash
-uvicorn src.main:app --reload
-```
+Enter docker compose up to run the application. This will install all the dependencies, project files, and will start the server.
 
-When the server starts, the API is available at `http://127.0.0.1:8000`.
+When the server starts, the API is available at `http://127.0.0.1:8000`. Change the given link http://0.0.0.0:8000 to http://127.0.0.0.1:8000
 
 ## Test the API
 
@@ -84,16 +72,6 @@ content-type: application/json
 
 The server assigns a `task_id` automatically and defaults `done` to `false` unless otherwise specified.
 
-## Database persistence
-
-This assignment version uses SQLite instead of an in-memory list. That means data is persisted to disk and does not reset when the server restarts.
-
-The SQLite database file is created as `tasks.db` in the `api_endpoint_assignment` folder.
-
-Screenshot of DB Browser:
-
-<img width="1264" height="577" alt="Screenshot 2026-07-31 002008" src="https://github.com/user-attachments/assets/42c20943-e08e-4601-a19f-a0e10ccdd817" />
-
 
 ## Notes
 
@@ -103,15 +81,4 @@ Example SQL query used during testing:
 DELETE FROM tasks WHERE done = 1;
 ```
 
-
 If no rows are returned, that means all tasks were already marked as `done = 1`.
-
-
-
-## Docker Run Command
-
-When creating a new docker, run this command in terminal: docker run --name 'NAME_GOES_HERE' -e POSTGRES_PASSWORD='PASSWORD_GOES_HERE' -e POSTGRES_DB=tasks -p 5432:5432 -v taskdata:/var/lib/postgresql/data -d
-
-When running an existing docker, run this command in terminal: docker start "container_name"
-
-To open SQL prompt, run this command: docker exec -it taskdb psql -U postgres -d tasks
