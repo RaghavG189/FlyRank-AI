@@ -6,21 +6,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+#Retrieve values located in .env file
 user = os.environ["POSTGRES_USER"]
 password = os.environ["POSTGRES_PASSWORD"]
 host = os.environ["POSTGRES_HOST"]
 port = os.environ["POSTGRES_PORT"]
 db = os.environ["POSTGRES_DB"]
 
+#Create the connection URL given variables
 url = f"postgres://{user}:{password}@{host}:{port}/{db}"
 
-
+#Establish connection object
 con = psycopg.connect(url, row_factory=dict_row)
 
+#Create cursor object
 cur = con.cursor()
 
+#Create tasks table if not already present
 cur.execute("""CREATE TABLE IF NOT EXISTS tasks(id serial PRIMARY KEY, title text, done boolean)""")
 
+#Seed 3 example tasks if table empty
 cur.execute("""INSERT INTO tasks(title, done)
 SELECT * FROM (
     VALUES
@@ -32,7 +37,7 @@ WHERE NOT EXISTS (
 SELECT 1 from tasks
 );
 """)
-con.commit()
+con.commit() #Commit changes to take effect
 
 
 
