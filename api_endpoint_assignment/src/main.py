@@ -6,15 +6,21 @@ from src.errors import NotFoundError, ValidationError
 from src.routes.meta_routes import router as metaroutes
 from src.routes.tasks_routes import router as taskroutes
 from src.repositories.tasks_repository import close_connection
+from src.core.supabase_client import get_supabase
+
 
 
 #Closes database and cursor when server stops
 @asynccontextmanager
 async def lifespan(app:FastAPI):
 
+    supabase_client = get_supabase() #Get the supabase object
+ 
+    app.state.supabase = supabase_client #Attach supabase to app's object
+
     yield
 
-    close_connection()
+    close_connection() #Close con and cur
 
 
 #Creats app object
