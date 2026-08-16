@@ -17,7 +17,7 @@ When downloading the files make sure to replace the placeholder values in .env.e
 
 Enter docker compose up to run the application. This will install all the dependencies, project files, and will start the server.
 
-When the server starts, the API is available at `http://127.0.0.1:8000`. Change the given link http://0.0.0.0:8000 to http://127.0.0.0.1:8000
+When the server starts, the API is available at `http://127.0.0.1:8000`. Change the given link http://0.0.0.0:8000 to http://127.0.0.1:8000
 
 ## Test the API
 

@@ -1,10 +1,16 @@
-#Class for NotFoundError
+#Class for NotFoundError - if content not found
 class NotFoundError(Exception):
     def __init__(self, message):
         self.message = message
 
 
-#Class for ValidationError
+#Class for ValidationError - if content is not in right format or null
 class ValidationError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+#Class for InvalidCredentials - if supabase rejected user login information
+class InvalidCredentials(Exception):
     def __init__(self, message):
         self.message = message
