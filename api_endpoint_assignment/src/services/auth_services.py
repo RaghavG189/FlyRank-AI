@@ -1,6 +1,5 @@
 import src.repositories.auth_respository as a_repo
-from src.errors import NotFoundError, ValidationError
-from supabase_auth.errors import AuthApiError
+from src.errors import NotFoundError, ValidationError, InvalidCredentials
 
 def sign_up_verify(email:str, password:str, request):
 
@@ -39,3 +38,16 @@ def login_verify(email:str, password:str, request):
 
     return response
 
+
+def check_token(request, credentials):
+    #Checks if header is malformed or missing
+
+    if credentials is None:
+
+        raise InvalidCredentials("Access token required.") 
+
+    token = credentials.credentials
+
+    response = a_repo.verify_token(token, request)
+
+    return response

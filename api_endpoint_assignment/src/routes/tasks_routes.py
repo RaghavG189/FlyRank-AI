@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import src.services.tasks_services as s
 
 
-router = APIRouter() #Creates router object
+router = APIRouter(tags=['Tasks']) #Creates router object
 
 
 #Get endpoint that retrieves all tasks using filtering

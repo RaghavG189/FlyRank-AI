@@ -33,3 +33,15 @@ def login_auth(email, password, request):
         raise InvalidCredentials("Invalid Login Credentials")
     
 
+def verify_token(token, request):
+
+    supabase = request.app.state.supabase
+
+    #Raise error if token invalid, expired, etc.
+    try:
+        response = supabase.auth.get_user(token)
+
+        return response
+    
+    except AuthApiError:
+        raise InvalidCredentials("Invalid or expired token")
