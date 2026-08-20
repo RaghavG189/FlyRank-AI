@@ -39,15 +39,6 @@ def login_verify(email:str, password:str, request):
     return response
 
 
-def check_token(request, credentials):
-    #Checks if header is malformed or missing
+def logout_verify(request):
 
-    if credentials is None:
-
-        raise InvalidCredentials("Access token required.") 
-
-    token = credentials.credentials
-
-    response = a_repo.verify_token(token, request)
-
-    return response
+    return a_repo.logout_auth(request)

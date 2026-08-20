@@ -41,7 +41,16 @@ def verify_token(token, request):
     try:
         response = supabase.auth.get_user(token)
 
-        return response
+        return response.user
     
     except AuthApiError:
         raise InvalidCredentials("Invalid or expired token")
+
+
+def logout_auth(request):
+
+    supabase = request.app.state.supabase
+
+    supabase.auth.sign_out()
+
+    

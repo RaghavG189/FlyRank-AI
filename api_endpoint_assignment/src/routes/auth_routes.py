@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Request, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from datetime import datetime
 import src.services.auth_services as auth
+import src.middleware.verification as verify
 
 
 router = APIRouter(tags=['Auth'])
@@ -45,11 +45,14 @@ class CheckTokenResponse(BaseModel):
     email: str
     account_date: datetime
 
-bearer_scheme = HTTPBearer(auto_error=False)
-
 @router.get("/protected/profile", status_code=200)
-def protected_profile(request:Request, credentials:HTTPAuthorizationCredentials | None=Depends(bearer_scheme),):
+def protected_profile(current_user=Depends(verify.check_token)):
 
-    response = auth.check_token(request, credentials)
 
-    return CheckTokenResponse(id=response.user.id, email=response.user.email, account_date=response.user.created_at)
+    return CheckTokenResponse(id=current_user.id, email=current_user.email, account_date=current_user.created_at)
+
+
+@router.post("/auth/logout", status_code=204)
+def logout(request:Request, current_user=Depends(verify.check_token)):
+
+    auth.logout_verify(request)

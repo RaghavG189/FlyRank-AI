@@ -55,7 +55,7 @@ Screenshot of UI:
 Running this command:
 
 ```bash
-curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"laundry\"}"
+curl.exe -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d "{\"title\":\"mowing\"}"
 ```
 
 Produces output similar to:
