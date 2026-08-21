@@ -14,15 +14,15 @@ A simple FastAPI task manager that supports the full CRUD cycle using GET, POST,
 
 When downloading all project files, you will be given 8 variables in your .env.example. Change .env.example to .env and for each variable:
 
-POSTGRES_USER = Set this to your chosen username
-POSTGRES_PASSWORD = Set this to your chosen postgres password
-POSTGRES_DB = Set this to the name you set for the db
-POSTGRES_HOST = Set this to "localhost"
-POSTGRES_PORT = Set this to 5432
+- POSTGRES_USER = Set this to your chosen username
+- POSTGRES_PASSWORD = Set this to your chosen postgres password
+- POSTGRES_DB = Set this to the name you set for the db
+- POSTGRES_HOST = Set this to "localhost"
+- POSTGRES_PORT = Set this to 5432
 
-SUPABASE_URL = You will enter the supabase URL for your supabase project
-SUPABASE_KEY = You will enter the anon key in your supabase project
-PORT = You can set this to either 3000 or 8000
+- SUPABASE_URL = You will enter the supabase URL for your supabase project
+- SUPABASE_KEY = You will enter the anon key in your supabase project
+- PORT = You can set this to either 3000 or 8000
 
 
 ## Run the server
