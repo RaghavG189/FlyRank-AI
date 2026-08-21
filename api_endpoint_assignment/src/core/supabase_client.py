@@ -8,7 +8,7 @@ load_dotenv()
 url: str = os.environ["SUPABASE_URL"]
 key: str = os.environ["SUPABASE_KEY"]
 
-supabase: Client = create_client(url, key)
+supabase: Client = create_client(url, key) #Create Client
 
 
 #Return supabase

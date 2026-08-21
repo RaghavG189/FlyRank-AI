@@ -14,6 +14,7 @@ def status():
     return {"status": "ok"}
 
 
+#GET endpoint that returns public info
 @router.get('/public/info', status_code=200)
 def public_info():
 
