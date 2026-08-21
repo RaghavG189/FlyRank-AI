@@ -53,7 +53,7 @@ http://127.0.0.1:8000/docs
 
 Screenshot of UI:
 
-<img width="2198" height="680" alt="Swagger UI Screenshot" src="https://github.com/user-attachments/assets/7e3fa51a-d2b1-4910-a4c4-d98a314d048d" />
+<img width="2227" height="1155" alt="Screenshot 2026-08-20 230608" src="https://github.com/user-attachments/assets/09f0b2e4-0bb9-42db-b960-87db11b98dfb" />
 
 ## TASK Endpoints
 
@@ -76,8 +76,7 @@ Screenshot of UI:
 
 ## Swagger UI Inputting Token for Authentication
 
-
-
+<img width="1508" height="570" alt="Screenshot 2026-08-20 224816" src="https://github.com/user-attachments/assets/b27182ec-aea6-43b5-a605-e2872218bf87" />
 
 
 ## Example response
