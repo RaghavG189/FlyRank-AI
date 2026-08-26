@@ -6,7 +6,7 @@ The first 3 catalogue pages will be scraped. The data collected will be raw text
 
 ## toscrape.com robots.txt
 
-After visiting the url: https://books.toscrape.com/robots.txt, not robots.txt file was found
+After visiting the url: https://books.toscrape.com/robots.txt, not robots.txt file was found (404 Not Found)
 
 
 ## Oath
