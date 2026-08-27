@@ -1,11 +1,12 @@
 #Import libraries for web scraping
+import json
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import requests
-import pydantic
+from pydantic import BaseModel, ValidationError
 
 
 
@@ -116,7 +117,7 @@ def store_book_data(soup, book_dicts, book_tuple, fetched_time):
         "availability_text": availability_text,
         "rating_text": rating,
         "description": description,
-        "source_page": source_url,
+        "source_page": source_page,
         "fetched_at": fetched_at
     }
 
@@ -192,11 +193,83 @@ for unique_url in unique_urls:
 
     elif response == "CACHE HIT":
 
-        fetched_time = file_path_book.stat().st_mtime
+        fetched_time = file_path_book.stat().st_birthtime
+        fetched_time = datetime.fromtimestamp(fetched_time).strftime('%Y-%m-%dT%H:%M:%S')
 
     #Get soup
     soup = get_soup(file_path_book)
 
     #Stores metadata for a book in a list
     store_book_data(soup, book_records, unique_url, fetched_time)
+print(f"Complete record: {book_records[0]}, detail_pages: {len(book_records)}")
 
+
+#Stage 4 - clean, check, store
+
+class record_schema(BaseModel):
+
+    title: str
+    product_url: str
+    price_text: str
+    availability_text: str
+    rating_text: str
+    description: str | None
+    source_page: str
+    fetched_at: str
+    price_gbp: float
+
+
+verified_records = []
+error_records = []
+
+for book_record in book_records:
+
+
+    try:
+        price = book_record["price_text"].replace("£", "")
+        book_record["price_gbp"] = float(price)
+    except ValueError as e:
+
+        bad_record = {
+            "record": book_record,
+            "reason": "Invalid Price Format"
+        }
+
+        error_records.append(bad_record)
+        continue
+
+
+    try:
+        verification = record_schema(title=book_record.get("title"), product_url=book_record.get("product_url"),
+                                    price_text=book_record.get("price_text"), availability_text=book_record.get("availability_text"),
+                                    rating_text=book_record.get("rating_text"), description=book_record.get("description"),
+                                    source_page=book_record.get("source_page"), fetched_at=book_record.get("fetched_at"),
+                                    price_gbp=book_record.get("price_gbp")
+                                    )
+        
+        verification = verification.model_dump_json() #Make it json serializable
+        verified_records.append(verification)
+
+    except ValidationError as e:
+
+        bad_record = {
+           "record": book_record,
+           "reason": e.errors() 
+        }
+
+        error_records.append(bad_record)
+
+
+#Save good records
+with open("output/books.json", "w", encoding="utf-8") as f:
+
+    json.dump(verified_records, f, indent=2)
+
+
+#Save bad records
+with open("errors.json", "w", encoding="utf-8") as f:
+
+    json.dump(error_records, f, indent=2)
+
+
+    
