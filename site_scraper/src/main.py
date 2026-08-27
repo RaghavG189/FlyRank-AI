@@ -27,9 +27,20 @@ book_urls = []
 book_records = []
 
 
+#Metrics for run-report.json
+start_time = datetime.now(timezone.utc)
+duration = 0
+pages_fetched = 0
+cache_hits = 0
+valid_records = 0
+invalid_records = 0
+failed_pages = 0
+
+
 
 #Function will check if .html file is present and if not will make a request to the site and save the data
 def save_data(file_path, url):
+    global pages_fetched, cache_hits, failed_pages
 
     if not file_path.is_file():
         try:
@@ -39,6 +50,7 @@ def save_data(file_path, url):
             response.raise_for_status()
 
             print("FETCH")
+            pages_fetched += 1 #metrics
 
             time.sleep(0.5)
 
@@ -54,12 +66,15 @@ def save_data(file_path, url):
         except requests.exceptions.HTTPError as error: #If server throws error then raise the error
 
             print(f"An HTTP error occurred: {error}")
+            failed_pages += 1
             return error
             
 
     else:
         #.html file is already present in cache/
         print("CACHE HIT")
+        cache_hits += 1 #metrics
+
         print(len(file_path.read_bytes()))
 
         response = "CACHE HIT"
@@ -183,7 +198,7 @@ for unique_url in unique_urls:
     response = save_data(file_path_book, book_url)
 
     if isinstance(response, requests.exceptions.HTTPError): #Temporary error handling - we already have all the urls so skip to next one
-
+        
         continue
 
     if response == "FETCH":
@@ -272,4 +287,32 @@ with open("errors.json", "w", encoding="utf-8") as f:
     json.dump(error_records, f, indent=2)
 
 
-    
+
+
+
+#Stage 5: 
+valid_records = len(verified_records)
+invalid_records = len(error_records)
+
+end_time = datetime.now(timezone.utc)
+
+duration = end_time - start_time
+duration = duration.total_seconds()
+
+start_time = str(start_time)
+end_time = str(end_time)
+
+metrics = {
+    "start_time": start_time,
+    "duration": duration,
+    "pages_fetched": pages_fetched,
+    "cache_hits": cache_hits,
+    "valid_records": valid_records,
+    "invalid_records": invalid_records,
+    "failed_pages": failed_pages
+}
+
+
+with open("output/run-report.json", "w", encoding="utf-8") as f:
+
+    json.dump(metrics, f, indent=2)
