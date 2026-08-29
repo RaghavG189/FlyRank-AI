@@ -111,3 +111,9 @@ DELETE FROM tasks WHERE done = 1;
 ```
 
 If no rows are returned, that means all tasks were already marked as `done = 1`.
+
+
+## LLM Endpoint
+
+.env variables:
+The variables provided in .env.example are the key components in allowing the LLM to run on your local computer.
