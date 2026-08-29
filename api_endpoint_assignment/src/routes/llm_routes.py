@@ -21,3 +21,5 @@ class OutputValidation(BaseModel):
 
 router.post("llm/job_classification")
 def job_classification(inputvalidation:InputValidation):
+
+    
