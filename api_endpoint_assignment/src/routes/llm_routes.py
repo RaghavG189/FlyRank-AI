@@ -1,25 +1,20 @@
 #import libraries to create endpoint
-from fastapi import FastAPI, Rou
-from pydantic import BaseModel
+from fastapi import APIRouter
+from pydantic import BaseModel, Field
+from typing import Annotated
+from src.llm.client import call_client
+
+router = APIRouter(tags=['LLM'])
 
 
-router = FastAPI()
+
 
 
 class InputValidation(BaseModel):
 
-    input: str
+    input: Annotated[str, Field(min_length=1, max_length=1000)]
 
-class OutputValidation(BaseModel):
-
-    category: str
-    experience: str
-    category_confidence: float
-    experience_confidence: float
-    reason: str
-
-
-router.post("llm/job_classification")
+@router.post('/llm/job_classification')
 def job_classification(inputvalidation:InputValidation):
 
-    
+    return call_client(inputvalidation.input)

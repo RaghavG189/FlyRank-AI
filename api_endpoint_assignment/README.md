@@ -24,6 +24,10 @@ When downloading all project files, you will be given 8 variables in your .env.e
 - SUPABASE_KEY = You will enter the anon key in your supabase project
 - PORT = You can set this to either 3000 or 8000
 
+- LLM_BASE_URL = local server
+- LLM_MODEL = LLM model
+- LLM_API_KEY = API key of model
+
 
 ## Run the server
 
@@ -117,3 +121,12 @@ If no rows are returned, that means all tasks were already marked as `done = 1`.
 
 .env variables:
 The variables provided in .env.example are the key components in allowing the LLM to run on your local computer.
+
+## CURL Commands for LLM Endpoint
+
+These are two CURL commands to test the LLM endpoint
+
+1. curl.exe -X POST http://127.0.0.1:8000 -H "Content-Type: application/json" -d '{"input":"PASTE_JOB_DESCRIPTION_HERE"}'
+
+2. curl.exe -X POST http://127.0.0.1:8000 -H "Content-Type: application/json" -d '{"input":""}'
+

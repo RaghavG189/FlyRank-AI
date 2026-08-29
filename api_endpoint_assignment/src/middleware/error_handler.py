@@ -1,4 +1,5 @@
 from src.errors import NotFoundError, ValidationError, InvalidCredentials
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 #Validaion error handler function that that takes message from class and returns to user
@@ -13,4 +14,9 @@ def not_found_error(request, exc:NotFoundError):
 def invalid_login(request, exc:InvalidCredentials):
     return JSONResponse(status_code=401, content={"error": exc.message})
 
-    
+#Request validation error function that returns field with error when fastapi raises RequestValidationError
+def request_validation_error(request, exc:RequestValidationError):
+    first_error = exc.errors()[0]
+    field = first_error["loc"][-1]
+
+    return JSONResponse(status_code=400, content={"error": f"{field}: {first_error['msg']}"})
