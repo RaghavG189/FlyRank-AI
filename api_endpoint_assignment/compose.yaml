@@ -11,7 +11,7 @@ services:
       SUPABASE_URL: ${SUPABASE_URL}
       SUPABASE_KEY: ${SUPABASE_KEY}
       PORT: ${PORT}
-      LLM_BASE_URL: ${LLM_BASE_URL}
+      LLM_BASE_URL: http://host.docker.internal:11434/v1/
       LLM_MODEL: ${LLM_MODEL}
       LLM_API_KEY: ${LLM_API_KEY}
       LLM_STUB: ${LLM_STUB}

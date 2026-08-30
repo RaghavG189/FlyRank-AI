@@ -12,7 +12,7 @@ router = APIRouter(tags=['LLM'])
 
 class InputValidation(BaseModel):
 
-    input: Annotated[str, Field(min_length=1, max_length=1000)]
+    input: Annotated[str, Field(min_length=1, max_length=6000)]
 
 @router.post('/llm/job_classification')
 def job_classification(inputvalidation:InputValidation):
