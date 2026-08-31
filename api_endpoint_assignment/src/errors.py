@@ -14,3 +14,8 @@ class ValidationError(Exception):
 class InvalidCredentials(Exception):
     def __init__(self, message):
         self.message = message
+
+#Class for LLMQuarantineError - if LLM response fails to be validated
+class LLMQuarantineError(Exception):
+    def __init__(self, message):
+        self.message = message

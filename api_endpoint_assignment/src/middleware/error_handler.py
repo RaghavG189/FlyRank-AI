@@ -1,4 +1,4 @@
-from src.errors import NotFoundError, ValidationError, InvalidCredentials
+from src.errors import NotFoundError, ValidationError, InvalidCredentials, LLMQuarantineError
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
@@ -20,3 +20,7 @@ def request_validation_error(request, exc:RequestValidationError):
     field = first_error["loc"][-1]
 
     return JSONResponse(status_code=400, content={"error": f"{field}: {first_error['msg']}"})
+
+#Request llm quarantine error function that returns field with error when fastapi raises llm quarantine error
+def llm_quarantine_error(request, exc:LLMQuarantineError):
+    return JSONResponse(status_code=422, content={"error": exc.message})

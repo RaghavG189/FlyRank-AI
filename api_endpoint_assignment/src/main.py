@@ -2,8 +2,8 @@
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
-from src.middleware.error_handler import validation_error, not_found_error, invalid_login, request_validation_error
-from src.errors import NotFoundError, ValidationError, InvalidCredentials
+from src.middleware.error_handler import validation_error, not_found_error, invalid_login, request_validation_error, llm_quarantine_error
+from src.errors import NotFoundError, ValidationError, InvalidCredentials, LLMQuarantineError
 from src.routes.meta_routes import router as metaroutes
 from src.routes.tasks_routes import router as taskroutes
 from src.routes.auth_routes import router as authroutes
@@ -41,3 +41,4 @@ app.add_exception_handler(NotFoundError, not_found_error)
 app.add_exception_handler(ValidationError, validation_error)
 app.add_exception_handler(InvalidCredentials, invalid_login)
 app.add_exception_handler(RequestValidationError, request_validation_error)
+app.add_exception_handler(LLMQuarantineError, llm_quarantine_error)

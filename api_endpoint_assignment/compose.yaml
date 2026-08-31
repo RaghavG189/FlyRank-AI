@@ -2,6 +2,8 @@ services:
   api:
     build: .
     ports: ["8000:8000"]
+    volumes:
+      - ./src/logs:/app/src/logs
     environment:
       POSTGRES_HOST: db
       POSTGRES_USER: ${POSTGRES_USER}
