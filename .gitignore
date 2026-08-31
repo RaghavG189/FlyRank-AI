@@ -9,3 +9,4 @@ cache/
 output/
 errors.json
 test_body.json
+*.jsonl
