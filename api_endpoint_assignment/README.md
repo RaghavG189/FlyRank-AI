@@ -136,3 +136,11 @@ These are two CURL commands to test the LLM endpoint
 After running several inputs, what surprised me was the LLM's reasoning. There was one job description that involved SWE in the finance sector but the LLM choose "other" for category
 because financial terms were mentioned.
 
+
+## max_retires for client
+
+I decided to set max_retries when creating the client to the default 2. By default as noted in OpenAI documentation,
+certain errors are retired 2 with short exponential backoffs. The errors included are - 408, 409, 429, >=500
+
+
+

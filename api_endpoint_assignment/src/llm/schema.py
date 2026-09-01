@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field
 from typing import Annotated
 from enum import Enum
 
-
-class Category(str, Enum):
+#LLM needs to choose between these options
+class Category(str, Enum): 
     SWE = "SWE"
     AI = "AI"
     DS = "DS"
@@ -11,6 +11,7 @@ class Category(str, Enum):
     FRONTEND = "Frontend"
     OTHER = "Other"
 
+#LLM needs to choose between these options
 class Experience(str, Enum):
     INTERN = "Intern"
     JUNIOR = "Junior"
@@ -18,6 +19,7 @@ class Experience(str, Enum):
     OTHER = "Other"
 
 
+#Schema the LLM needs to follow
 class OutputValidation(BaseModel):
 
     category: Category

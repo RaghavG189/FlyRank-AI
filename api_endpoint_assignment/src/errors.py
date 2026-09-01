@@ -19,3 +19,8 @@ class InvalidCredentials(Exception):
 class LLMQuarantineError(Exception):
     def __init__(self, message):
         self.message = message
+
+#Class for LLMDisabled - if .env variable - LLMDisabled is set to FALSE
+class LLMDisabled(Exception):
+    def __init__(self, message):
+        self.message = message
