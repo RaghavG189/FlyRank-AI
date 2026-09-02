@@ -7,6 +7,5 @@ __pycache__/
 .env
 cache/
 output/
-errors.json
-test_body.json
+*.json
 *.jsonl
