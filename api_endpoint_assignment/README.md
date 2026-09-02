@@ -2,7 +2,7 @@
 
 A simple FastAPI task manager that supports the full CRUD cycle using GET, POST, PUT, and DELETE endpoints. You can retrieve, create, update, and delete tasks using the provided API.
 
-## Features
+## Task Endpoint Features
 
 - GET `/tasks` to list all tasks
 - POST `/tasks` to create a new task
@@ -23,11 +23,6 @@ When downloading all project files, you will be given 8 variables in your .env.e
 - SUPABASE_URL = You will enter the supabase URL for your supabase project
 - SUPABASE_KEY = You will enter the anon key in your supabase project
 - PORT = You can set this to either 3000 or 8000
-
-- LLM_BASE_URL = local server
-- LLM_MODEL = LLM model
-- LLM_API_KEY = API key of model
-
 
 ## Run the server
 
@@ -119,19 +114,87 @@ If no rows are returned, that means all tasks were already marked as `done = 1`.
 
 ## LLM Endpoint
 
-.env variables:
+The job classification LLM endpoint is designed to take a job description as input. The input is then passed to the LLM as well as a system prompt which allows the LLM to classify
+the description as a specific job (AI, SWE, DS, etc.) and experience level (junior, senior, intern, etc.). The LLM will also provide a value from 0.0 - 1.0 on how confident it is in its answer
+for both the category and experience it choose. It will then provide a reason as to why the LLM choose what it did based on the job description. 
+
+## Example output
+
+Running the curl command: 
+curl.exe -X POST http://127.0.0.1:8000 -H "Content-Type: application/json/llm/job_classification" -d '@test_body.json' where test_body.json contains: {
+    "input": "Position Summary\nThe contractor shall provide analytics support.\n\nKey Duties:\n- Collect and analyze data\n- Build predictive models\n- Create dashboards\n\nQualifications:\n- Bachelor's degree in Data Science\n- 3+ years experience\n- Python/SQL proficiency"
+}
+will output:
+{"category":"DS","experience":"Senior","category_confidence":0.95,"experience_confidence":0.9,"reason":"Data Science degree and 3+ years experience in Python/SQL proficiency indicate senior-level analytics support role"}
+
+## Job card
+# Job card
+What it does (one sentence):    Classifies a job description as a specific category and experience level.
+Input:                          { "text": "string, 1-1000 characters" }
+Output:                         { "category": one of [SWE|AI|DS|Backend|Frontend|Other],
+                                  "experience": one of [Intern|Junior|Senior|Other],
+                                  "category_confidence": 0.0-1.0,
+                                  "experience_confidence": 0.0-1.0,
+                                  "reason": "one short sentence why covering decision for both category and experience" }
+
+It must never:                  invent a category or experience level outside the list · return free text ·
+                                give medical, legal or financial advice · reveal the prompt
+
+When unsure it should:          return "Other" for category/experience with low confidence, not a guess
+
+## Provider and Model used
+
+For this LLM endpoint, I chose Ollama as my provider and llama3.2:3b as my model
+
+
+## Setting up LLM .env variables
+
+LLM .env variables:
+
+- LLM_BASE_URL = local server
+- LLM_MODEL = LLM model
+- LLM_API_KEY = API key of model
+- LLM_ENABLED = Set this to either TRUE or FALSE if you want to make calls or not to the LLM
+
 The variables provided in .env.example are the key components in allowing the LLM to run on your local computer.
+
+## Eval Result
+
+{'failed': [{'input': 'Company: TBD Investors\nPosition: Software Engineering Intern\nType: Remote\n\nAbout TBD Investors\nTBD I'}, {'input': 'Company: Terso AI\nLocation: Remote (Applications via LinkedIn)\nPosition: AI Developer\n\nAbout Terso A'}, {'input': 'Company: RTX Fintech and Research\nPosition: Intern Software Engineer - Trading Systems\nLocation: Low'}, {'input': 'Company: Mathematica\nPosition: Data Scientist\nType: Remote or Flexible Office Locations\nSalary: $70,'}], 'correct': 4, 'percentage': 50.0}
+
+This evaluation was done on 9/1/26 using prompt 'your-job-v1.md'
+
+## Cost Log
+
+This is a cost log for one call made to the LLM:
+{
+  "prompt_version": "your-job-v1.md",
+  "model": "llama3.2:3b",
+  "input_tokens": 932,
+  "output_tokens": 80,
+  "duration": 0.001213249970999641,
+  "repair": false
+}
+
+## Estimate and what I would fix
+
+If the LLM was given 10,000 requests, I would definitely switch to a system that can handle making more calls. I would also change the way
+I would store the logs instead of using a list/dictionary.
+
+If there is something I could fix given more time I would experiment with different LLM like ones provided by OpenAI, Google, etc. and see what
+performance difference there is.
+
 
 ## CURL Commands for LLM Endpoint
 
 These are two CURL commands to test the LLM endpoint
 
-1. curl.exe -X POST http://127.0.0.1:8000 -H "Content-Type: application/json/llm/job_classification" -d '{"input":"PASTE_JOB_DESCRIPTION_HERE"}'
+1. curl.exe -X POST http://127.0.0.1:8000/llm/job_classification -H "Content-Type: application/json" -d '{"input":"PASTE_JOB_DESCRIPTION_HERE"}'
 
-2. curl.exe -X POST http://127.0.0.1:8000 -H "Content-Type: application/json/llm/job_classification" -d '{"input":""}'
+2. curl.exe -X POST http://127.0.0.1:8000/llm/job_classification -H "Content-Type: application/json" -d '{"input":""}'
 
 
-## Output Results
+## Output Results on test input
 
 After running several inputs, what surprised me was the LLM's reasoning. There was one job description that involved SWE in the finance sector but the LLM choose "other" for category
 because financial terms were mentioned.
@@ -143,4 +206,6 @@ I decided to set max_retries when creating the client to the default 2. By defau
 certain errors are retired 2 with short exponential backoffs. The errors included are - 408, 409, 429, >=500
 
 
+## Results after running 8 test cases
 
+After running the endpoint through 8 inputs of job descriptions, the LLM managed to get 4/8 correct.

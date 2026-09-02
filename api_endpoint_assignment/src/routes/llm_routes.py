@@ -19,3 +19,4 @@ class InputValidation(BaseModel):
 def job_classification(inputvalidation:InputValidation):
 
     return call_client(inputvalidation.input)
+
